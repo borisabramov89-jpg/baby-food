@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מדריך התקנה – מעקב אוכל לתינוק על GitHub</title>
+<style>
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f8f5f1;color:#2e3a34;max-width:860px;margin:0 auto;padding:20px;line-height:1.7}
+h1{color:#4f7a65}h2{color:#4f7a65;border-bottom:2px solid #e7f1ec;padding-bottom:4px;margin-top:30px}
+.step{background:#fff;border:1px solid #e3e8e5;border-radius:14px;padding:14px 18px;margin:12px 0;box-shadow:0 1px 4px #0001}
+.num{display:inline-block;width:30px;height:30px;border-radius:50%;background:#6f9a84;color:#fff;text-align:center;line-height:30px;font-weight:700;margin-left:8px}
+code{background:#eef2f0;padding:2px 6px;border-radius:5px;direction:ltr;unicode-bidi:embed;font-family:Consolas,monospace}
+.note{background:#fdf4e1;border-right:4px solid #e9b44c;padding:8px 12px;border-radius:8px}
+.warn{background:#fbe9e4;border-right:4px solid #c0634a;padding:8px 12px;border-radius:8px}
+.ok{background:#e7f1ec;border-right:4px solid #6f9a84;padding:8px 12px;border-radius:8px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #e3e8e5;padding:7px;text-align:right}th{background:#6f9a84;color:#fff}
+.tree{direction:ltr;text-align:left;background:#fff;border:1px solid #e3e8e5;border-radius:10px;padding:10px;font-family:Consolas,monospace;white-space:pre}
+</style></head><body>
+<h1>🥕 מדריך התקנה – מעקב אוכל לתינוק על GitHub (חינם)</h1>
+<p>זמן התקנה: כ-15 דקות, פעם אחת. אחר כך פשוט פותחים קישור – במחשב או בטלפון.</p>
+
+<h2>📦 מה יש ב-ZIP</h2>
+<div class="tree">baby-food-tracker/
+├── SETUP_GUIDE_HE.html      ← המדריך הזה
+├── site-repo/               ← עולה לריפו הציבורי (האתר, בלי נתונים)
+│   ├── index.html
+│   ├── manifest.webmanifest
+│   ├── icon.svg
+│   ├── .nojekyll
+│   └── README.md
+└── data-repo/               ← עולה לריפו הפרטי (הנתונים)
+    ├── data.json
+    └── README.md</div>
+
+<h2>🧩 איך זה בנוי</h2>
+<table><tr><th>ריפו</th><th>סוג</th><th>מה בו</th></tr>
+<tr><td><code>baby-food</code></td><td>ציבורי</td><td>האפליקציה בלבד. GitHub Pages מפרסם אותה בכתובת <code>https://USERNAME.github.io/baby-food/</code></td></tr>
+<tr><td><code>baby-food-data</code></td><td>🔒 פרטי</td><td>קובץ הנתונים <code>data.json</code>. רק שניכם ניגשים אליו, עם טוקן אישי.</td></tr></table>
+
+<h2>🚀 התקנה – שלב אחר שלב</h2>
+
+<div class="step"><span class="num">1</span><b>חשבונות GitHub</b><br>
+כל אחד מכם פותח חשבון ב-<code>github.com</code> (אישי, לא של העבודה). אפשר גם חשבון אחד משותף – ואז מדלגים על שלב 4.</div>
+
+<div class="step"><span class="num">2</span><b>ריפו האתר (ציבורי)</b>
+<ol><li>לוחצים <b>+</b> ← <b>New repository</b> ← שם: <code>baby-food</code> ← <b>Public</b> ← <b>Create</b>.</li>
+<li><b>Add file ← Upload files</b> ← גוררים את <b>כל התוכן</b> של התיקייה <code>site-repo</code> (כולל <code>.nojekyll</code>) ← <b>Commit changes</b>.
+<div class="note">אם <code>.nojekyll</code> לא נגרר (קובץ מוסתר) – זה לא קריטי, האתר יעבוד גם בלעדיו.</div></li>
+<li><b>Settings ← Pages</b> ← Source: <b>Deploy from a branch</b> ← Branch: <code>main</code> / <code>(root)</code> ← <b>Save</b>.</li>
+<li>אחרי 1–2 דקות תופיע הכתובת: <code>https://USERNAME.github.io/baby-food/</code></li></ol>
+<div class="ok">ב-HTML אין שום מידע אישי, ולכן זה בסדר שהריפו הזה ציבורי (בחשבון חינמי, Pages עובד רק מריפו ציבורי).</div></div>
+
+<div class="step"><span class="num">3</span><b>ריפו הנתונים (פרטי)</b>
+<ol><li><b>New repository</b> ← שם: <code>baby-food-data</code> ← <b>🔒 Private</b> ← <b>Create</b>.</li>
+<li><b>Upload files</b> ← מעלים את <code>data.json</code> ואת <code>README.md</code> מתוך <code>data-repo</code> ← <b>Commit</b>.
+<div class="note">גם אם לא תעלו את <code>data.json</code>, האפליקציה תיצור אותו לבד בשמירה הראשונה (בתנאי שבריפו יש לפחות קובץ אחד, למשל README).</div></li></ol></div>
+
+<div class="step"><span class="num">4</span><b>הוספת בן/בת הזוג לריפו הפרטי</b><br>
+בריפו <code>baby-food-data</code>: <b>Settings ← Collaborators ← Add people</b> ← שם המשתמש שלה ← היא מאשרת את ההזמנה במייל.</div>
+
+<div class="step"><span class="num">5</span><b>יצירת טוקן אישי (כל אחד את שלו)</b>
+<ol><li>תמונת הפרופיל ← <b>Settings ← Developer settings ← Personal access tokens ← Fine-grained tokens ← Generate new token</b>.</li>
+<li><b>Token name:</b> <code>baby-food</code> · <b>Expiration:</b> לבחור תוקף (מומלץ שנה, או No expiration).</li>
+<li><b>Resource owner:</b> הבעלים של <code>baby-food-data</code>.
+<div class="note">אצל בת הזוג: אם הריפו בבעלותך, ייתכן שהיא לא תוכל לבחור אותו בטוקן Fine-grained. במקרה כזה: <b>Tokens (classic)</b> עם הרשאת <code>repo</code>, או להשתמש באותו טוקן משני מכשירים (פחות מומלץ), או חשבון משותף.</div></li>
+<li><b>Repository access:</b> <b>Only select repositories</b> ← <code>baby-food-data</code> בלבד.</li>
+<li><b>Permissions ← Repository permissions ← Contents:</b> <b>Read and write</b>.</li>
+<li><b>Generate token</b> ← להעתיק מיד (מתחיל ב-<code>github_pat_</code>). הוא מוצג פעם אחת בלבד.</li></ol></div>
+
+<div class="step"><span class="num">6</span><b>חיבור האפליקציה (אצלך)</b>
+<ol><li>פותחים <code>https://USERNAME.github.io/baby-food/</code> ← לשונית <b>⚙️ הגדרות וסנכרון</b>.</li>
+<li>ממלאים: שם משתמש GitHub (בעל הריפו), ריפו <code>baby-food-data</code>, ענף <code>main</code>, קובץ <code>data.json</code>, והטוקן.</li>
+<li><b>🧪 בדיקת חיבור</b> ← צריך להופיע ✅ ו-🔒 "הריפו פרטי". ← <b>🔌 שמור והתחבר</b>.</li>
+<li>ממלאים פרטי תינוק ושמות ההורים ← <b>שמור</b> ← בוחרים את השם שלך בראש המסך ("משתמש/ת נוכחי/ת").</li></ol></div>
+
+<div class="step"><span class="num">7</span><b>חיבור אצל בן/בת הזוג</b>
+<ol><li>אצלך: <b>🔗 העתק קישור הגדרה</b> ← שולחים לה (הקישור <b>לא</b> כולל את הטוקן).</li>
+<li>היא פותחת את הקישור ← הפרטים כבר ממולאים ← מדביקה את הטוקן שלה ← <b>שמור והתחבר</b> ← בוחרת את השם שלה למעלה.</li></ol></div>
+
+<div class="step"><span class="num">8</span><b>אפליקציה על מסך הבית בטלפון</b><br>
+<b>iPhone (Safari):</b> כפתור שיתוף ← "הוסף למסך הבית". · <b>Android (Chrome):</b> ⋮ ← "הוסף למסך הבית" / "התקן אפליקציה".<br>
+בכל מכשיר חדש מדביקים את הטוקן פעם אחת.</div>
+
+<h2>🔄 איך הסנכרון עובד</h2>
+<ul>
+<li>סנכרון אוטומטי כל 20 שניות, מיד אחרי כל שמירה, ובכל חזרה לאפליקציה. הנקודה בראש המסך: 🟢 מסונכרן · 🟡 מסנכרן · 🔴 שגיאה.</li>
+<li><b>מיזוג לפי רשומה:</b> אם שניכם מתעדים באותו זמן – שני הרישומים נשמרים. אם שניכם עורכים <i>אותה</i> רשומה – העריכה האחרונה קובעת.</li>
+<li>בלי אינטרנט – ממשיכים לתעד, והכול נשלח בחיבור הבא.</li>
+<li>כל שמירה = commit בריפו הפרטי. לשחזור: בריפו ← <code>data.json</code> ← <b>History</b>.</li>
+</ul>
+
+<h2>🔐 אבטחה</h2>
+<div class="warn"><ul style="margin:0">
+<li>לעולם לא לשים את הטוקן בתוך <code>index.html</code> או בריפו – האתר ציבורי.</li>
+<li>הטוקן נשמר רק בדפדפן של המכשיר. מכשיר שאבד: GitHub ← Settings ← Developer settings ← למחוק את הטוקן וליצור חדש.</li>
+<li>לוודא שריפו הנתונים <b>פרטי</b> (בדיקת החיבור מתריעה אם לא).</li>
+<li>לא להשתמש ב-Gist "סודי" לנתונים – הוא נגיש לכל מי שיש לו קישור.</li>
+</ul></div>
+
+<h2>🛠️ תקלות נפוצות</h2>
+<table><tr><th>הודעה</th><th>פתרון</th></tr>
+<tr><td>הטוקן לא תקין או שפג תוקפו (401)</td><td>ליצור טוקן חדש ולהדביק בהגדרות.</td></tr>
+<tr><td>אין הרשאה (403)</td><td>בטוקן: Contents = Read and write, והריפו הנכון נבחר.</td></tr>
+<tr><td>הריפו לא נמצא (404)</td><td>לבדוק איות של שם המשתמש והריפו, ושהטוקן מורשה לריפו. אצל בת הזוג – שאישרה את הזמנת ה-Collaborator.</td></tr>
+<tr><td>האתר מציג 404</td><td>לחכות 2 דקות אחרי הפעלת Pages; לוודא ש-<code>index.html</code> נמצא בשורש הריפו (לא בתוך תיקייה).</td></tr>
+<tr><td>הנתונים לא מופיעים במכשיר השני</td><td>ללחוץ 🔄 "סנכרן עכשיו"; לוודא ששני המכשירים מחוברים לאותו owner/repo.</td></tr>
+</table>
+
+<h2>♻️ עדכון גרסה של האפליקציה</h2>
+<p>מעלים <code>index.html</code> חדש לריפו <code>baby-food</code> (מחליף את הקיים). הנתונים לא נפגעים – הם בריפו הנפרד.</p>
+
+<p style="color:#6b7a72;font-size:13px;margin-top:30px">התוכן התזונתי מבוסס על החוברות של אביטל הדרי, דיאטנית קלינית (RD). המידע כללי ואינו מחליף ייעוץ אישי עם דיאטנ/ית או רופא/ה.</p>
+</body></html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#6f9a84">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="מעקב אוכל">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>מהביס הראשון ועד לשולחן המשפחתי – מעקב משפחתי</title>
+<style>
+:root{--g:#6f9a84;--gd:#4f7a65;--gl:#e7f1ec;--r:#c0634a;--rl:#fbe9e4;--y:#e9b44c;--yl:#fdf4e1;--bg:#f8f5f1;--card:#fff;--tx:#2e3a34;--mut:#6b7a72;--bd:#e3e8e5}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:15px}
+header{background:linear-gradient(135deg,var(--g),var(--gd));color:#fff;padding:14px 18px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0002}
+header h1{margin:0;font-size:20px}
+header .sub{font-size:13px;opacity:.9}
+.syncbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:13px}
+.dot{width:10px;height:10px;border-radius:50%;background:#ccc;display:inline-block}
+.dot.on{background:#8ef0b0}.dot.err{background:#ff9b8a}.dot.busy{background:#ffe08a}
+nav{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:96px;z-index:19;padding:0 8px}
+nav button{border:0;background:none;padding:12px 12px;font-size:14px;cursor:pointer;white-space:nowrap;color:var(--mut);border-bottom:3px solid transparent}
+nav button.act{color:var(--gd);border-bottom-color:var(--g);font-weight:700}
+main{max-width:1150px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.act{display:block}
+.card{background:var(--card);border-radius:16px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 4px #0001;border:1px solid var(--bd)}
+.card h2{margin:0 0 10px;font-size:18px;color:var(--gd)}
+.card h3{margin:14px 0 6px;font-size:15px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.kpi{background:var(--gl);border-radius:14px;padding:12px;text-align:center}
+.kpi b{display:block;font-size:26px;color:var(--gd)}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;font-size:14px}
+.btn:hover{background:var(--gd)}.btn.sec{background:#fff;color:var(--gd);border:1px solid var(--g)}
+.btn.red{background:var(--r)}.btn.sm{padding:4px 9px;font-size:12px}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:9px;background:#fff;color:var(--tx);width:100%}
+input[dir=ltr]{text-align:left}
+label{font-size:13px;color:var(--mut);display:block;margin-bottom:3px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--g);color:#fff;padding:8px;text-align:right;position:sticky;top:0}
+td{padding:8px;border-bottom:1px solid var(--bd);vertical-align:top}
+.tw{overflow-x:auto;max-height:560px;overflow-y:auto;border-radius:12px;border:1px solid var(--bd)}
+.ck{list-style:none;padding:0;margin:0}
+.ck li{padding:5px 30px 5px 0;position:relative;line-height:1.55}
+.ck li:before{content:"✓";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;background:var(--g);color:#fff;font-size:12px;text-align:center;line-height:20px}
+.note{background:var(--yl);border-right:4px solid var(--y);padding:8px 12px;border-radius:8px;margin:8px 0;font-size:13.5px}
+.warn{background:var(--rl);border-right:4px solid var(--r);padding:8px 12px;border-radius:8px;margin:8px 0;font-size:13.5px}
+.ok{background:var(--gl);border-right:4px solid var(--g);padding:8px 12px;border-radius:8px;margin:8px 0;font-size:13.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;background:var(--gl);color:var(--gd);margin:2px}
+.pill.r{background:var(--rl);color:var(--r)}.pill.y{background:var(--yl);color:#8a6414}.pill.gr{background:#eee;color:#777}
+.al{border:1px solid var(--bd);border-radius:14px;padding:12px;background:#fff}
+.al .hd{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.al .ic{font-size:30px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.step{border:2px dashed var(--bd);border-radius:12px;padding:8px;text-align:center;cursor:pointer;font-size:13px;min-height:74px}
+.step.done{border:2px solid var(--g);background:var(--gl)}
+.step.react{border:2px solid var(--r);background:var(--rl)}
+.step.lock{opacity:.45;cursor:not-allowed}
+.step b{display:block;font-size:15px}
+.bar{height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--g)}
+.fr{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.fruit{border:1px solid var(--bd);border-radius:14px;text-align:center;padding:8px;cursor:pointer;background:#fff;user-select:none}
+.fruit .e{font-size:30px}.fruit.done{background:var(--gl);border-color:var(--g)}
+.fruit small{display:block;color:var(--mut);font-size:11px}
+.cues{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.cue{border-radius:12px;padding:10px;text-align:center;font-size:13px}
+.cue .e{font-size:26px;display:block}
+.modal{position:fixed;inset:0;background:#0006;display:none;align-items:center;justify-content:center;z-index:50;padding:10px}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:16px;padding:18px;max-width:520px;width:100%;max-height:92vh;overflow:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.row>div{flex:1;min-width:140px}
+.timeline{border-right:3px solid var(--g);padding-right:14px;margin-right:6px}
+.tl{position:relative;padding:4px 0 10px}
+.tl:before{content:"";position:absolute;right:-21px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--g)}
+.tl.r:before{background:var(--r)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cd{min-height:64px;border:1px solid var(--bd);border-radius:8px;padding:3px;font-size:11px;background:#fff;overflow:hidden}
+.cd .n{font-weight:700;color:var(--mut)}
+.cd.today{border:2px solid var(--g)}
+.cd .x{display:block;border-radius:4px;padding:0 3px;margin-top:2px;background:var(--gl);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cd .x.a{background:var(--yl)}.cd .x.rr{background:var(--rl)}
+.chead{text-align:center;font-weight:700;font-size:12px;color:var(--mut)}
+.mut{color:var(--mut);font-size:13px}
+.flow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.flow span{background:var(--gl);padding:6px 12px;border-radius:20px}
+.seat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.seat div{text-align:center;padding:10px;border-radius:12px;background:var(--gl);font-size:13px}
+.seat div.bad{background:var(--rl)}
+.seat .e{font-size:30px;display:block}
+code{background:#f1f3f2;padding:1px 5px;border-radius:5px;direction:ltr;unicode-bidi:embed}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+@media(max-width:600px){nav{top:118px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🥕 מהביס הראשון ועד לשולחן המשפחתי – מעקב משפחתי</h1>
+  <div class="sub" id="hdrBaby">הגדירו שם ותאריך לידה בלשונית "הגדרות וסנכרון"</div>
+  <div class="syncbar">
+    <span class="dot" id="syncDot"></span><span id="syncTxt">לא מחובר לסנכרון (שמירה מקומית בלבד)</span>
+    <button type="button" class="btn sm sec" id="btnSyncNow" style="background:#fff">🔄 סנכרן עכשיו</button>
+    <span>משתמש/ת נוכחי/ת:</span>
+    <select id="whoSel" style="width:auto;padding:3px 6px"></select>
+  </div>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<!-- DASHBOARD -->
+<section class="tab" id="t-dash">
+  <div class="grid g4" id="kpis"></div>
+  <div class="card" id="nextStep"></div>
+  <div class="grid g2">
+    <div class="card"><h2>📅 לוח חודשי</h2>
+      <div class="row" style="margin-bottom:8px"><button type="button" class="btn sm sec" id="calPrev">‹ קודם</button><b id="calTitle" style="flex:1;text-align:center"></b><button type="button" class="btn sm sec" id="calNext">הבא ›</button></div>
+      <div class="cal" id="cal"></div>
+      <div class="mut" style="margin-top:6px"><span class="pill">ארוחה</span><span class="pill y">חשיפה לאלרגן</span><span class="pill r">תגובה</span></div>
+    </div>
+    <div class="card"><h2>🕒 פעילות אחרונה</h2><div class="timeline" id="recent"></div></div>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<section class="tab" id="t-guide">
+  <div class="card"><h2>🧭 מסלול שלב אחר שלב</h2>
+    <div class="mut">סמנו כל שלב כשהושלם – הסימון משותף לשניכם.</div>
+    <div id="roadmap"></div>
+  </div>
+  <div class="grid g2">
+  <div class="card"><h2>1️⃣ מה כדאי לעשות לפני שמתחילים?</h2>
+    <ul class="ck">
+      <li>היכרות עם כלי אוכל (כפית) – לתת לתינוק להחזיק, לגעת, להכניס לפה.</li>
+      <li>אכילה מול התינוק – כמה שיותר.</li>
+      <li>חיזוק קשר יד-עין-פה – באמצעות צעצועי נשיכה וכפיות.</li>
+      <li>הכנת הסביבה – רכישת ציוד מתאים.</li>
+    </ul>
+    <h3>🛒 רשימת ציוד (לסימון)</h3><div id="gear"></div>
+  </div>
+  <div class="card"><h2>2️⃣ מתי ואיך מתחילים?</h2>
+    <ul class="ck">
+      <li>מומלץ להתחיל סביב גיל 6 חודשים עם הצגת סימני מוכנות.</li>
+      <li>אפשר להתחיל עם מזון אצבעות כבר מגיל 6 חודשים (בייבי-לד), או להתקדם בהדרגה במרקמים – או לשלב את שתי הגישות.</li>
+      <li>בחרו את הדרך שהכי מתאימה לכם – <b>מה שחשוב הוא להתקדם</b>, ולא להיתקע על מרקם מסוים לאורך זמן.</li>
+    </ul>
+    <h3>✅ סימני מוכנות (לסימון)</h3><div id="ready"></div>
+    <h3>מסלול מרקמים</h3>
+    <div class="flow"><span>🥣 טחון חלק</span>➜<span>🥄 טחון גס</span>➜<span>🖐️ מזון אצבעות</span></div>
+    <div class="note">✋ <b>מבחן הצביטה (בייבי-לד):</b> מזון רך שנמעך בקלות בין שתי אצבעות, באורך אצבע של מבוגר וברוחב של כשתי אצבעות – כך שקל לתינוק לאחוז.</div>
+  </div>
+  </div>
+  <div class="card"><h2>3️⃣ השבועיים הראשונים – ירקות ופירות בסיסיים</h2>
+    <ul class="ck">
+      <li>נתחיל משבועיים של ירקות ופירות בסיסיים. <span class="mut">*אין צורך להתחיל מירקות ואז מפירות – אפשר להתחיל במה שרוצים.</span></li>
+      <li>בכל יום נציע מאכל חדש, ואותו אפשר להוסיף למאכל שכבר ניסינו.</li>
+      <li>נוודא שהתינוק מרגיש טוב – לא עייף מדי, לא רעב מדי ולא שבע מדי (מומלץ להמתין כשעה–שעה וחצי אחרי הנקה/בקבוק תמ״ל).</li>
+      <li>נתחיל בכמויות קטנות – כמה כפיות או כמה ביסים, ונתקדם בהדרגה בהתאם לכל תינוק.</li>
+    </ul>
+    <div class="flow" style="margin:8px 0"><span>יום 1: 🍠 בטטה</span><span>יום 2: 🍠 בטטה + 🍌 בננה</span><span>יום 3: 🍌 בננה + 🥕 גזר</span></div>
+    <div class="ok">את המעקב אחרי המאכלים עושים בלשונית <b>"🍎 ירקות ופירות"</b>.</div>
+  </div>
+  <div class="card"><h2>4️⃣ אחרי כמה שבועות – אלרגנים</h2>
+    <div class="ok">המעקב המלא בלשונית <b>"🥜 אלרגנים"</b>. הכללים מפורטים שם.</div>
+  </div>
+</section>
+
+<!-- FIRST FOODS -->
+<section class="tab" id="t-foods">
+  <div class="card"><h2>🍎 ירקות ופירות בסיסיים – צ'ק ליסט</h2>
+    <div class="mut">לחצו על מאכל כדי לרשום הגשה (נרשם ביומן הארוחות).</div>
+    <div class="bar" style="margin:10px 0"><i id="foodBar"></i></div>
+    <div class="fr" id="foods"></div>
+    <div class="note">בכל יום מאכל חדש אחד, ואפשר לשלב אותו עם מאכל שכבר הוכר.</div>
+  </div>
+  <div class="card"><h2>➕ מאכלים נוספים שהוכרו</h2>
+    <div class="row"><div><label for="newFood">שם המאכל</label><input id="newFood" placeholder="למשל: אפונה, תות, עוף…"></div><div style="flex:0"><button type="button" class="btn" id="addFood">הוסף</button></div></div>
+    <div id="extraFoods" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<!-- ALLERGENS -->
+<section class="tab" id="t-all">
+  <div class="card"><h2>🥜 איך חושפים לאלרגנים?</h2>
+    <div class="grid g2">
+      <ul class="ck">
+        <li><b>מתי:</b> סביב גיל 6 חודשים, אחרי כמה שבועות של ירקות ופירות בסיסיים.</li>
+        <li>היסטוריה משפחתית של אלרגיות למזון – להתייעץ עם רופא/ה או דיאטנ/ית לפני התחלת מוצקים ואלרגנים.</li>
+        <li><b>חושפים לכל אלרגן בנפרד במשך 3 ימים:</b> ⅛ כפית ← ¼ כפית ← ½ כפית.</li>
+        <li><b>עדיף בשעות הבוקר/צהריים.</b></li>
+        <li>לערבב עם <b>כפית</b> של מחית פרי/ירק ולהגיש ישירות לפה – לא עם כמות גדולה של מזון, כדי לוודא שהאלרגן אכן נאכל.</li>
+      </ul>
+      <ul class="ck">
+        <li>תינוק שניזון בשגרה מתמ״ל חלבי – כבר נחשף לחלבון חלב פרה, וברוב המקרים אין צורך בחשיפה מיוחדת למוצרי חלב.</li>
+        <li><b>לחשוף לכל סוג אגוז ולכל סוג דג בנפרד.</b> להתחיל מהסוגים שהתינוק צפוי להיחשף אליהם.</li>
+        <li>אם מופיעה תגובה כלשהי – פונים לרופא/ה ולא חושפים שוב לאותו מזון עד לבירור מתאים.</li>
+        <li><b>סיימתם?</b> חשוב להמשיך לשלב את האלרגנים באופן קבוע בתזונה – כך מפחיתים סיכון להתפתחות אלרגיה בעתיד.</li>
+      </ul>
+    </div>
+    <div class="note">⚙️ <label style="display:inline"><input type="checkbox" id="formulaDairy" style="width:auto"> התינוק ניזון בשגרה מתמ״ל חלבי (מוצרי חלב יסומנו "לא נדרש")</label></div>
+    <div class="row" style="margin-top:6px"><div><label>התקדמות כוללת</label><div class="bar"><i id="allBar"></i></div></div><div style="flex:0" class="mut" id="allPct"></div></div>
+  </div>
+  <div class="grid g2" id="allergens"></div>
+  <div class="card"><h2>🔁 שמירה על חשיפה קבועה (אחרי סיום)</h2>
+    <div class="mut">ימים מאז החשיפה האחרונה לכל אלרגן שהושלם (כולל ארוחות ביומן שבהן סומן האלרגן). הסימון אחרי 7 ימים הוא תזכורת בלבד – החוברת ממליצה "באופן קבוע".</div>
+    <div id="maint"></div>
+  </div>
+</section>
+
+<!-- MEAL LOG -->
+<section class="tab" id="t-log">
+  <div class="card"><h2>🍽️ יומן ארוחות</h2>
+    <div class="row">
+      <div><button type="button" class="btn" id="addMeal">+ ארוחה חדשה</button></div>
+      <div><label for="logQ">חיפוש</label><input id="logQ" placeholder="מאכל, הערה…"></div>
+      <div><label for="logF">סוג</label><select id="logF"><option value="">הכל</option><option>בוקר</option><option>צהריים</option><option>ערב</option><option>ביניים</option></select></div>
+      <div><label for="logA">רק עם</label><select id="logA"><option value="">הכל</option><option value="al">חשיפה לאלרגן</option><option value="re">תגובה</option></select></div>
+    </div>
+  </div>
+  <div class="tw"><table><thead><tr><th>תאריך</th><th>שעה</th><th>ארוחה</th><th>מה הוגש</th><th>מרקם</th><th>כמות</th><th>אלרגן</th><th>תיאבון</th><th>תגובה</th><th>הערות</th><th>תיעד/ה</th><th></th></tr></thead><tbody id="logBody"></tbody></table></div>
+</section>
+
+<!-- MEALS & CUES -->
+<section class="tab" id="t-meals">
+  <div class="card"><h2>⏰ מתי מוסיפים עוד ארוחה?</h2>
+    <div class="mut">*תדירות מומלצת ממוצעת – כל תינוק והקצב שלו! השורה המודגשת מתאימה לגיל התינוק לפי תאריך הלידה.</div>
+    <div class="tw" style="margin-top:8px"><table><thead><tr><th>גיל</th><th>כמות ארוחות</th><th>סוג ארוחות</th><th>כמות הנקה/בקבוקים *מינימלית*</th></tr></thead><tbody id="mealTable"></tbody></table></div>
+    <div class="ok"><b>שימו לב: הנקה היא תמיד לפי דרישה!</b> הנקה מומלצת ע״י ארגון הבריאות העולמי עד גיל שנתיים ואף יותר, כל עוד זה מתאים לאמא ולתינוק.</div>
+    <div id="todayMeals"></div>
+  </div>
+  <div class="card"><h2>👶 התנהלות בזמן ארוחה</h2>
+    <ul class="ck"><li><b>חשוב תמיד להיות קשובים לתינוק</b> ולבחון האם הוא בכלל רוצה לאכול. *אף פעם לא מנסים להאכיל תינוק שאינו מעוניין.</li></ul>
+    <h3 style="color:var(--gd)">איך יודעים שהתינוק רוצה לאכול?</h3>
+    <div class="cues">
+      <div class="cue" style="background:var(--gl)"><span class="e">😮</span>פותח פה</div>
+      <div class="cue" style="background:var(--gl)"><span class="e">🥄</span>מתקרב לכפית או לאוכל</div>
+      <div class="cue" style="background:var(--gl)"><span class="e">🙌</span>מושיט ידיים לאוכל</div>
+      <div class="cue" style="background:var(--gl)"><span class="e">🤩</span>מתלהב כשרואה אוכל</div>
+      <div class="cue" style="background:var(--gl)"><span class="e">🗣️</span>משמיע קולות או מסמן שרוצה עוד</div>
+      <div class="cue" style="background:var(--gl)"><span class="e">😌</span>נשאר רגוע ומעורב בארוחה</div>
+    </div>
+    <h3 style="color:var(--r)">איך יודעים שהתינוק לא רוצה או סיים לאכול?</h3>
+    <div class="cues">
+      <div class="cue" style="background:var(--rl)"><span class="e">↩️</span>מסובב את הראש</div>
+      <div class="cue" style="background:var(--rl)"><span class="e">🤐</span>סוגר את הפה</div>
+      <div class="cue" style="background:var(--rl)"><span class="e">✋</span>דוחף את הכפית או האוכל</div>
+      <div class="cue" style="background:var(--rl)"><span class="e">🍝</span>זורק אוכל שוב ושוב</div>
+      <div class="cue" style="background:var(--rl)"><span class="e">😶</span>מאבד עניין בארוחה</div>
+      <div class="cue" style="background:var(--rl)"><span class="e">😫</span>מתעצבן או מתעייף</div>
+    </div>
+    <ul class="ck" style="margin-top:10px">
+      <li><b>השתדלו לאכול כמה שיותר ארוחות משותפות</b> – תינוקות לומדים ומתקדמים בצורה הטובה ביותר בעזרת מודלינג (צפייה וחיקוי).</li>
+      <li><b>מומלץ לאפשר לתינוק להתנסות ולהתלכלך כמה שיותר</b> – אכילה היא מיומנות נרכשת. גם ארוחה שבה התינוק "לא אכל כלום" ורק התלכלך – היא ארוחה טובה.</li>
+      <li><b>חשוב תמיד לשמור על אווירה נעימה וחיובית</b> – ללא לחץ ושכנועים.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="tab" id="t-safe">
+  <div class="card"><h2>⚠️ כללי בטיחות חשובים</h2>
+    <div class="warn">🍯 <b>דבש – אסור עד גיל שנה.</b> דבש עלול להכיל נבגים של החיידק הגורם לבוטוליזם – מחלה נוירולוגית נדירה אך מסוכנת. דבש עלול להימצא גם ברטבים, מטבלים, מאפים ומוצרים מוכנים – יש לוודא שהמזון אינו מכיל דבש. *חימום או אפייה אינם מבטלים את הסיכון. <span class="pill r" id="honeyCnt"></span></div>
+    <div class="warn">🥚 <b>מזונות נאים או לא מפוסטרים – להימנע עד גיל 5 שנים.</b> מערכת החיסון של תינוקות ופעוטות חלשה יותר, ומזונות אלה עלולים להכיל חיידקים מזיקים.</div>
+    <div class="warn">🍇 <b>מזונות עגולים וקטנים – עד גיל 5 שנים:</b> ענבים, דובדבנים, אוכמניות, עגבניות שרי וכדומה – <b>יש לחתוך לרבעים</b> (ולא לחצאים).</div>
+    <div class="warn">🍿 <b>פיצוחים, אגוזים וגרעינים, פופקורן, סוכריות על מקל, מסטיקים, טופי, מרשמלו וממתקי גומי – להימנע עד גיל 5 שנים.</b> עלולים לחסום את קנה הנשימה ולהעלות סיכון לחנק.<br><span class="mut">(אגוזים לחשיפה לאלרגנים ניתנים כחמאה חלקה או טחונים לאבקה – לא שלמים.)</span></div>
+  </div>
+  <div class="card"><h2>🪑 הושבה נכונה ובטוחה בכיסא אוכל</h2>
+    <p>מומלץ להושיב בכיסא אוכל כבר מגיל 6 חודשים, גם אם התינוק עדיין לא יושב עצמאית – אפשר להיעזר במגבת מגולגלת או כרית קטנה לתמיכה. ישיבה יציבה חשובה לבטיחות וגם לחוויית האכילה – לתינוק צריך להיות נוח!</p>
+    <div class="seat">
+      <div><span class="e">🧍</span>מנח זקוף ויציב</div>
+      <div><span class="e">📐</span>זווית של 90° בירכיים, בברכיים ובקרסוליים</div>
+      <div><span class="e">🦶</span>תמיכה לכפות הרגליים (לא מתעופפות באוויר!)</div>
+      <div class="bad"><span class="e">🚫</span>האכלה בשיפוע אינה מומלצת ומעלה סיכון לחנק!</div>
+    </div>
+  </div>
+  <div class="card"><h2>😮‍💨 גאג רפלקס (רפלקס הקאה) ≠ חנק</h2>
+    <p>רפלקס הקאה הוא רפלקס טבעי ותקין, <b>שדווקא מגן על תינוקות מפני חנק</b>. נרצה לעודד את התינוק להשתמש בו – ולא להיבהל או להלחיץ אותו. חשוב להבדיל בינו לבין חנק.</p>
+  </div>
+</section>
+
+<!-- NUTRITION -->
+<section class="tab" id="t-nut">
+  <div class="grid g2">
+  <div class="card"><h2>🩸 רכיבים חשובים בתזונה</h2>
+    <h3>ברזל</h3>
+    <div><span class="pill">מן החי:</span> 🥩 בקר · 🍗 עוף · הודו · 🐟 דגים · 🥚 ביצים</div>
+    <div><span class="pill">מן הצומח:</span> 🫘 קטניות · טופו · 🥬 תרד · טחינה</div>
+    <div class="note">*מומלץ לשלב עם מזונות עשירים בוויטמין C לשיפור ספיגת הברזל: פלפל, תותים, קיווי, פירות הדר, עגבנייה.</div>
+    <h3>שומן איכותי</h3><div>🥑 אבוקדו · 🫒 שמן זית · טחינה · חמאת בוטנים · חמאת שקדים</div>
+    <h3>ירקות ופירות</h3><div>במגוון רחב של טעמים, מרקמים וצבעים.</div>
+    <h3>פחמימות</h3><div>בתחילת הדרך בעיקר דגנים שאינם מלאים, ובהמשך לשלב בהדרגה גם דגנים מלאים – בהתאם לסבילות התינוק.</div>
+    <div class="ok" id="ironStat"></div>
+  </div>
+  <div class="card"><h2>💧 שתיית מים</h2>
+    <ul class="ck">
+      <li>עם תחילת הטעימות מציעים גם מים – מתחילים בכמויות קטנות (כמה לגימות בסיום הארוחה) ומעלים בהדרגה עם העלייה בכמות המזון המוצק.</li>
+      <li>בגילאי 6–12 חודשים: כ-<b>120–240 מ״ל ביממה</b> (חצי כוס עד כוס). אין צורך לעודד מעבר לכך, כדי שהמים לא יבואו על חשבון חלב אם, תמ״ל או מזון מוצק.</li>
+      <li>*לא כל התינוקות יגיעו לכמות הזו, וזה לרוב תקין. חשוב לוודא כ-<b>4–6 טיטולים רטובים</b> ביממה כסימן שאין התייבשות.</li>
+      <li>אין צורך להרתיח מי שתייה מגיל חצי שנה. *מים להכנת תמ״ל – יש להרתיח תמיד.</li>
+      <li>להפריד בין בקבוק תמ״ל/חלב אם שאוב לבין בקבוק המים.</li>
+      <li>להגיש מים בכוס פתוחה וגם בבקבוק עם קשית – תומכים בתפקודי פה ולשון.</li>
+    </ul>
+    <h3>📊 מעקב יומי – מים וטיטולים</h3>
+    <div class="row"><div><label for="wDate">תאריך</label><input type="date" id="wDate"></div><div><label for="wMl">מים (מ״ל)</label><input type="number" id="wMl" min="0" step="10"></div><div><label for="wDia">טיטולים רטובים</label><input type="number" id="wDia" min="0"></div><div style="flex:0"><button type="button" class="btn" id="wSave">שמור</button></div></div>
+    <div id="wList" style="margin-top:8px"></div>
+  </div>
+  <div class="card"><h2>🧀 מוצרי חלב</h2>
+    <ul class="ck">
+      <li>דלים בברזל ועלולים להפחית את ספיגתו – <b>לא להפוך אותם למרכיב עיקרי</b>, אבל אין צורך להימנע מהם; לשלב כחלק מתפריט מגוון (סידן, חלבון ושומן).</li>
+      <li>להימנע מחלב ניגר כמשקה עד גיל שנה. אפשר מעט במתכונים.</li>
+      <li><b>בבחירה:</b> מעל 3% שומן · דלים בנתרן (עד 400 מ״ג ל-100 גרם) · ללא סוכר או פרי מוסף.</li>
+    </ul>
+    <table style="margin-top:8px"><thead><tr><th>ארוחות מוצקים ביום</th><th>ארוחות חלביות מומלצות</th></tr></thead>
+    <tbody><tr><td>1–2 (גיל 6–9 ח׳)</td><td>עד 3–4 פעמים בשבוע</td></tr><tr><td>3+ (גיל 9–12 ח׳)</td><td>עד 7 פעמים בשבוע (ארוחה אחת ביום יכולה להיות חלבית)</td></tr></tbody></table>
+    <div class="ok" id="dairyStat"></div>
+  </div>
+  <div class="card"><h2>🌿 תבלינים וסוכר מוסף</h2>
+    <ul class="ck">
+      <li>ברוב התבלינים השגרתיים אין בעיה: קינמון, פפריקה מתוקה, כמון, אורגנו, בזיליקום, כורכום ועשבי תיבול טריים טחונים היטב.</li>
+      <li>להימנע משימוש מופרז במלח ובתבלינים עתירי נתרן (למשל אבקת מרק), מסוכר מוסף ומתבלינים חריפים.</li>
+      <li><b>סוכר מוסף:</b> סוכר לבן/חום/קנים, דבש, סילאן, מייפל, סירופ אגבה, סירופ תירס.</li>
+      <li><b>עוד להימנע ככל הניתן:</b> 🍪 חטיפים וממתקים · 🧃 שקיות סמוצ'י ומחיות מוכנות · "חטיפים" לתינוקות.</li>
+    </ul>
+  </div>
+  </div>
+</section>
+
+<!-- REACTIONS -->
+<section class="tab" id="t-react">
+  <div class="card"><h2>🩺 יומן תגובות ותסמינים</h2>
+    <div class="warn">במידה ומופיעה תגובה כלשהי לאלרגן – פונים לרופא/ה ולא חושפים שוב לאותו מזון עד לבירור מתאים.</div>
+    <div class="mut">כל תגובה שנרשמת ביומן הארוחות או בשלבי האלרגנים מופיעה כאן. אפשר לעדכן סטטוס בירור.</div>
+    <div id="reactList"></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="tab" id="t-set">
+  <div class="card"><h2>👶 פרטי התינוק</h2>
+    <div class="row"><div><label for="sName">שם</label><input id="sName"></div><div><label for="sBirth">תאריך לידה</label><input type="date" id="sBirth"></div><div><label for="sStart">תאריך התחלת מוצקים</label><input type="date" id="sStart"></div></div>
+    <div class="row" style="margin-top:8px"><div><label for="sUsers">שמות ההורים (מופרדים בפסיק)</label><input id="sUsers" placeholder="בוריס, ..."></div><div style="flex:0"><button type="button" class="btn" id="sSave">שמור</button></div></div>
+  </div>
+
+  <div class="card" style="border:2px solid var(--g)"><h2>☁️ סנכרון דרך GitHub (מומלץ – עובד גם בטלפון)</h2>
+    <div class="mut">הנתונים נשמרים בקובץ <code>data.json</code> בריפו <b>פרטי</b> שלכם. הטוקן נשמר <b>רק בדפדפן הזה</b> ולא נכנס לקובץ הנתונים או לאתר.</div>
+    <div class="row" style="margin-top:8px">
+      <div><label for="ghOwner">שם משתמש GitHub (בעל הריפו)</label><input id="ghOwner" dir="ltr" placeholder="your-username" autocomplete="off"></div>
+      <div><label for="ghRepo">ריפו הנתונים (פרטי)</label><input id="ghRepo" dir="ltr" placeholder="baby-food-data" autocomplete="off"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div><label for="ghBranch">ענף (branch)</label><input id="ghBranch" dir="ltr" value="main"></div>
+      <div><label for="ghPath">שם קובץ</label><input id="ghPath" dir="ltr" value="data.json"></div>
+    </div>
+    <div style="margin-top:8px"><label for="ghToken">Personal Access Token (Fine-grained, Contents: Read and write)</label><input id="ghToken" type="password" dir="ltr" placeholder="github_pat_..." autocomplete="off"></div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="ghConnect">🔌 שמור והתחבר</button>
+      <button type="button" class="btn sec" id="ghTest">🧪 בדיקת חיבור</button>
+      <button type="button" class="btn sec" id="ghLink">🔗 העתק קישור הגדרה לבן/בת הזוג</button>
+      <button type="button" class="btn sec" id="ghOff">ניתוק</button>
+    </div>
+    <div id="ghMsg" aria-live="polite"></div>
+    <div class="note">🔄 סנכרון אוטומטי כל 20 שניות, בכל חזרה לאפליקציה ומיד אחרי כל שמירה. שינויים של שניכם <b>מתמזגים לפי רשומה</b> – אף אחד לא דורס את השני. כל שמירה נרשמת בהיסטוריית ה-commits ב-GitHub, כך שאפשר לשחזר כל מצב קודם.</div>
+    <div class="note">🔗 "קישור הגדרה" ממלא אוטומטית את שם המשתמש והריפו אצל בן/בת הזוג – <b>בלי הטוקן</b>. כל אחד מדביק את הטוקן שלו פעם אחת בכל מכשיר.</div>
+  </div>
+
+  <div class="card"><h2>📁 חלופה: קובץ בתיקייה משותפת (מחשב בלבד)</h2>
+    <div class="mut">עובד ב-Edge/Chrome במחשב עם תיקיית OneDrive/Drive מסונכרנת. לא נדרש אם משתמשים ב-GitHub.</div>
+    <div class="row" style="margin-top:8px"><button type="button" class="btn sec" id="fsNew">📄 צור קובץ נתונים</button><button type="button" class="btn sec" id="fsOpen">📂 התחבר לקובץ קיים</button><button type="button" class="btn sec" id="fsOff">ניתוק</button></div>
+  </div>
+
+  <div class="card"><h2>💾 גיבוי וייצוא</h2>
+    <div class="row"><button type="button" class="btn sec" id="exp">⬇️ ייצוא גיבוי JSON</button><label class="btn sec" style="margin:0;color:var(--gd)">⬆️ ייבוא ומיזוג JSON<input type="file" id="imp" accept=".json" hidden></label><button type="button" class="btn sec" id="csv">📊 ייצוא יומן ל-Excel (CSV)</button><button type="button" class="btn red" id="wipe">מחיקת הנתונים המקומיים</button></div>
+  </div>
+  <div class="card mut">מבוסס על החוברות של אביטל הדרי, דיאטנית קלינית (RD) – תזונת תינוקות וילדים. המידע כללי ואינו מחליף ייעוץ אישי עם דיאטנ/ית או רופא/ה.</div>
+</section>
+</main>
+
+<div class="modal" id="mdl"><div class="box" id="mdlBox"></div></div>
+<footer>המדריך נועד למידע כללי ואינו מחליף ייעוץ אישי עם דיאטנ/ית · אביטל הדרי, דיאטנית קלינית (RD)</footer>
+
+<script>
+(()=>{
+// ---------- DATA ----------
+const ALLERGENS=[
+ {k:'peanut',n:'בוטנים',e:'🥜',sv:['חמאת בוטנים טבעית, חלקה, ללא סוכר ומלח','בוטן טבעי טחון/מגורד לאבקה חלקה']},
+ {k:'egg',n:'ביצים',e:'🥚',sv:['ביצה קשה מבושלת היטב, מעוכה']},
+ {k:'dairy',n:'מוצרי חלב',e:'🥛',sv:['יוגורט יווני','גבינה לבנה','גבינת ריקוטה']},
+ {k:'sesame',n:'שומשום',e:'🌾',sv:['טחינה גולמית 100% שומשום']},
+ {k:'nuts',n:'אגוזים',e:'🌰',sv:['חמאת אגוזים טבעית, חלקה, ללא סוכר ומלח','אגוז טבעי טחון/מגורד לאבקה חלקה'],sub:['שקדים','אגוזי מלך','קשיו','פיסטוק','אגוזי לוז','פקאן','אגוזי ברזיל','מקדמיה'],subNote:'לחשוף לכל סוג אגוז בנפרד'},
+ {k:'wheat',n:'חיטה',e:'🌾',sv:['פסטה טחונה','בורגול','קוסקוס']},
+ {k:'fish',n:'דגים',e:'🐟',sv:['דג מבושל היטב ללא עצמות, רך ומעוך'],sub:['דג לבן','טונה','סלמון'],subNote:'סוגים נפוצים. אם אוכלים בשגרה סוגים נוספים – לחשוף בנפרד גם אליהם'},
+ {k:'soy',n:'סויה',e:'🫘',sv:['טופו טבעי טחון','פולי סויה מבושלים טחונים']},
+ {k:'kiwi',n:'קיווי',e:'🥝',sv:['קיווי מעוך/טחון']},
+ {k:'buckwheat',n:'כוסמת',e:'🥣',sv:['דייסת כוסמת רכה','כוסמת מבושלת טחונה']}
+];
+const STEPS=[{q:'⅛',t:'יום 1'},{q:'¼',t:'יום 2'},{q:'½',t:'יום 3'}];
+const FOODS=[['בננה','🍌'],['תפוח','🍎'],['בטטה','🍠'],['דלעת','🎃'],['גזר','🥕'],['אגס','🍐'],['מלון','🍈'],['אבוקדו','🥑'],['תפוח אדמה','🥔'],['קישוא','🥒']];
+const GEAR=['כיסא אוכל','כפיות קצרות + ארוכות','בקבוק עם קשית + כוסית סיליקון קטנה','(לא חובה) שושנת אידוי','(לא חובה) סינרים','(לא חובה) צלחות נדבקות'];
+const READY=['התעניינות וסקרנות במזון','יכולת לשבת עם תמיכה','החזקה יציבה של הראש והצוואר','קירוב ידיים וחפצים לפה'];
+const ROAD=[
+ ['prep','הכנה: היכרות עם כפית, אכילה מול התינוק, ציוד'],
+ ['ready','זיהוי סימני מוכנות (סביב גיל 6 חודשים)'],
+ ['method','בחירת גישה: מחיות / בייבי-לד / משולב'],
+ ['first','שבועיים של ירקות ופירות בסיסיים – מאכל חדש בכל יום'],
+ ['allergen','חשיפה לאלרגנים – כל אלרגן 3 ימים (⅛ ← ¼ ← ½ כפית)'],
+ ['meals','הוספת ארוחות לפי גיל + מעבר מרקמים'],
+ ['maintain','שילוב קבוע של כל האלרגנים בתזונה'],
+ ['family','ארוחות משותפות ליד השולחן המשפחתי 🎉']];
+const MEALROWS=[[6,8,'6–7 חודשים','1–2','בוקר | צהריים','3–4'],[8,10,'8–9 חודשים','2–3','בוקר | צהריים | ערב','3–4'],[10,12,'10–11 חודשים','3–4','בוקר | צהריים | ערב + ארוחת ביניים','1–2'],[12,999,'12+ חודשים','4+','בוקר | צהריים | ערב + 1–3 ארוחות ביניים','משתנה']];
+
+// ---------- STORE (record-level merge) ----------
+const LS='babyFoodTracker_v1';
+let db;try{db=JSON.parse(localStorage.getItem(LS)||'{"recs":{}}');if(!db.recs)db={recs:{}}}catch(e){db={recs:{}}}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const now=()=>Date.now();
+function me(){return localStorage.getItem(LS+'_who')||''}
+function put(id,obj){db.recs[id]={...obj,id,u:now(),by:me()};persist()}
+function del(id){if(db.recs[id]){db.recs[id]={id,deleted:true,u:now(),by:me()};persist()}}
+function get(id){const r=db.recs[id];return r&&!r.deleted?r:null}
+function all(type){return Object.values(db.recs).filter(r=>!r.deleted&&r.type===type)}
+let dirty=false;
+function persist(){localStorage.setItem(LS,JSON.stringify(db));dirty=true;render();scheduleWrite()}
+function merge(other){let ch=false;for(const[id,r]of Object.entries((other&&other.recs)||{})){const m=db.recs[id];if(!m||r.u>m.u){db.recs[id]=r;ch=true}}if(ch)localStorage.setItem(LS,JSON.stringify(db));return ch}
+function needsPush(remote){if(dirty)return true;for(const[id,r]of Object.entries(db.recs)){const x=remote.recs&&remote.recs[id];if(!x||r.u>x.u)return true}return false}
+const $=id=>document.getElementById(id);
+function setSync(s,t){$('syncDot').className='dot '+(s||'');$('syncTxt').textContent=t}
+const hhmm=()=>new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+// ---------- GITHUB SYNC ----------
+const GHK=LS+'_gh';
+function gh(){try{const c=JSON.parse(localStorage.getItem(GHK)||'null');return c&&c.owner&&c.repo&&c.token?c:null}catch(e){return null}}
+const b64e=s=>{const b=new TextEncoder().encode(s);let bin='';for(let i=0;i<b.length;i+=0x8000)bin+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(bin)};
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob((s||'').replace(/\s/g,'')),c=>c.charCodeAt(0)));
+function ghHeaders(c,json){const h={Authorization:'Bearer '+c.token,Accept:'application/vnd.github+json'};if(json)h['Content-Type']='application/json';return h}
+const ghUrl=c=>`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}`;
+function ghErr(st){return st===401?'הטוקן לא תקין או שפג תוקפו':st===403?'אין הרשאה (בדקו Contents: Read and write) או חריגה ממגבלת קריאות':st===404?'הריפו לא נמצא או שהטוקן לא מורשה אליו':'HTTP '+st}
+let ghBusy=false,ghAgain=false;
+async function ghSync(attempt=0){
+ const c=gh();if(!c)return;
+ if(ghBusy&&attempt===0){ghAgain=true;return}
+ ghBusy=true;setSync('busy','מסנכרן…');
+ try{
+  const r=await fetch(ghUrl(c)+'?ref='+encodeURIComponent(c.branch)+'&_='+Date.now(),{cache:'no-store',headers:ghHeaders(c)});
+  let remote={recs:{}},sha=null;
+  if(r.status===200){const j=await r.json();sha=j.sha;
+    let txt='';if(j.content)txt=b64d(j.content);else if(j.download_url||j.git_url){const raw=await fetch(ghUrl(c)+'?ref='+encodeURIComponent(c.branch),{cache:'no-store',headers:{...ghHeaders(c),Accept:'application/vnd.github.raw'}});txt=await raw.text()}
+    try{if(txt.trim())remote=JSON.parse(txt)}catch(e){}
+    if(!remote.recs)remote={recs:{}}}
+  else if(r.status===404){const rr=await fetch(`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}`,{cache:'no-store',headers:ghHeaders(c)});if(!rr.ok)throw new Error(ghErr(rr.status))}
+  else throw new Error(ghErr(r.status));
+  const changed=merge(remote);
+  if(needsPush(remote)||r.status===404){
+   const body={message:`עדכון ע"י ${me()||'משתמש'} · ${new Date().toISOString()}`,content:b64e(JSON.stringify(db)),branch:c.branch};if(sha)body.sha=sha;
+   const p=await fetch(ghUrl(c),{method:'PUT',headers:ghHeaders(c,true),body:JSON.stringify(body)});
+   if(p.status===409||p.status===422){ghBusy=false;if(attempt<4){await new Promise(z=>setTimeout(z,400+Math.random()*800));return ghSync(attempt+1)}throw new Error('התנגשות שמירה – ננסה שוב בסבב הבא')}
+   if(!p.ok)throw new Error('כתיבה נכשלה: '+ghErr(p.status));
+   dirty=false;
+  }
+  if(changed)render();
+  setSync('on',`מסונכרן עם GitHub (${c.owner}/${c.repo}) · ${hhmm()}`);
+ }catch(e){setSync('err','שגיאת סנכרון GitHub: '+(e.message||e)+(navigator.onLine?'':' (אין חיבור לאינטרנט)'))}
+ finally{ghBusy=false;if(ghAgain){ghAgain=false;setTimeout(()=>ghSync(),300)}}
+}
+
+// ---------- LOCAL FILE SYNC (fallback, desktop Edge/Chrome) ----------
+let fh=null,timer=null,wt=null;
+const idb=()=>new Promise((res,rej)=>{const o=indexedDB.open('bft',1);o.onupgradeneeded=()=>o.result.createObjectStore('h');o.onsuccess=()=>res(o.result);o.onerror=rej});
+async function saveHandle(h){const d=await idb();d.transaction('h','readwrite').objectStore('h').put(h,'file')}
+async function loadHandle(){try{const d=await idb();return await new Promise(r=>{const q=d.transaction('h').objectStore('h').get('file');q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}catch(e){return null}}
+async function fileSync(){
+ try{
+  if((await fh.queryPermission({mode:'readwrite'}))!=='granted'){if((await fh.requestPermission({mode:'readwrite'}))!=='granted'){setSync('err','נדרשת הרשאה – לחצו "סנכרן עכשיו"');return}}
+  const txt=await (await fh.getFile()).text();
+  let remote={recs:{}};try{if(txt.trim())remote=JSON.parse(txt)}catch(e){}
+  const ch=merge(remote);
+  if(needsPush(remote)){const w=await fh.createWritable();await w.write(JSON.stringify(db));await w.close();dirty=false}
+  if(ch)render();
+  setSync('on','מסונכרן עם '+fh.name+' · '+hhmm());
+ }catch(e){setSync('err','שגיאת סנכרון: '+e.message)}
+}
+async function syncNow(){
+ if(gh())return ghSync();
+ if(fh)return fileSync();
+ setSync('','לא מחובר לסנכרון (שמירה מקומית בלבד)');
+}
+function scheduleWrite(){if(!gh()&&!fh)return;clearTimeout(wt);wt=setTimeout(syncNow,800)}
+function startLoop(){clearInterval(timer);timer=setInterval(syncNow,20000);syncNow()}
+async function fsNew(){if(!window.showSaveFilePicker)return alert('הדפדפן לא תומך – השתמשו בסנכרון GitHub.');fh=await showSaveFilePicker({suggestedName:'baby-food-data.json',types:[{description:'JSON',accept:{'application/json':['.json']}}]});await saveHandle(fh);dirty=true;startLoop()}
+async function fsOpen(){if(!window.showOpenFilePicker)return alert('הדפדפן לא תומך – השתמשו בסנכרון GitHub.');[fh]=await showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}]});await saveHandle(fh);startLoop()}
+window.addEventListener('focus',()=>(gh()||fh)&&syncNow());
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(gh()||fh))syncNow()});
+window.addEventListener('online',()=>(gh()||fh)&&syncNow());
+
+// ---------- HELPERS ----------
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const fmtD=d=>d?new Date(d+'T00:00').toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}):'';
+const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00')-new Date(a+'T00:00'))/864e5);
+const foodList=m=>(m.foods||'').split(',').map(t=>t.trim());
+function settings(){return get('settings')||{name:'',birth:'',start:'',users:'',formulaDairy:false}}
+function ageMonths(){const s=settings();if(!s.birth)return null;const b=new Date(s.birth+'T00:00'),n=new Date();let m=(n.getFullYear()-b.getFullYear())*12+n.getMonth()-b.getMonth();if(n.getDate()<b.getDate())m--;return Math.max(0,m)}
+function allergenKeys(){const out=[];ALLERGENS.forEach(a=>{const custom=all('subtype').filter(s=>s.parent===a.k).map(s=>s.name);const subs=a.sub?[...a.sub,...custom]:null;if(subs)subs.forEach(s=>out.push({key:a.k+'::'+s,a,label:a.n+' – '+s,sub:s}));else out.push({key:a.k,a,label:a.n})});return out}
+function expState(key){const st=[0,1,2].map(i=>get('exp|'+key+'|'+i));const react=st.some(s=>s&&s.reaction);const done=st.every(s=>s)&&!react;const n=st.filter(Boolean).length;return{st,react,done,n}}
+function modal(html){$('mdlBox').innerHTML=html;$('mdl').classList.add('on')}
+function closeM(){$('mdl').classList.remove('on')}
+$('mdl').addEventListener('click',e=>{if(e.target.id==='mdl')closeM()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+
+// ---------- NAV ----------
+const TABS=[['dash','🏠 לוח בקרה'],['guide','🧭 מדריך שלב-אחר-שלב'],['foods','🍎 ירקות ופירות'],['all','🥜 אלרגנים'],['log','🍽️ יומן ארוחות'],['meals','⏰ ארוחות וסימנים'],['nut','🥗 תזונה ומים'],['safe','⚠️ בטיחות'],['react','🩺 תגובות'],['set','⚙️ הגדרות וסנכרון']];
+$('nav').innerHTML=TABS.map(([k,n])=>`<button type="button" data-t="${k}">${n}</button>`).join('');
+function go(k){if(!$('t-'+k))k='dash';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('act',t.id==='t-'+k));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('act',b.dataset.t===k));localStorage.setItem(LS+'_tab',k)}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.t)});
+
+// ---------- MEAL MODAL ----------
+function mealForm(m,preset){
+ m=m||{};preset=preset||{};
+ m={date:today(),time:new Date().toTimeString().slice(0,5),meal:'בוקר',foods:'',texture:'טחון חלק',amount:'',allergen:'',appetite:'',reaction:'',notes:'',...preset,...m};
+ const ak=allergenKeys();
+ modal(`<h2>${m.id?'עריכת ארוחה':'ארוחה חדשה'}</h2>
+ <div class="row"><div><label>תאריך</label><input type="date" id="mDate" value="${m.date}"></div><div><label>שעה</label><input type="time" id="mTime" value="${m.time}"></div><div><label>ארוחה</label><select id="mMeal">${['בוקר','צהריים','ערב','ביניים'].map(x=>`<option ${x===m.meal?'selected':''}>${x}</option>`).join('')}</select></div></div>
+ <label style="margin-top:8px">מה הוגש (מופרד בפסיקים)</label><input id="mFoods" value="${esc(m.foods)}" placeholder="בטטה, בננה">
+ <div class="row" style="margin-top:8px"><div><label>מרקם</label><select id="mTex">${['טחון חלק','טחון גס','מזון אצבעות','משולב'].map(x=>`<option ${x===m.texture?'selected':''}>${x}</option>`).join('')}</select></div><div><label>כמות</label><input id="mAmt" value="${esc(m.amount)}" placeholder="3 כפיות / כמה ביסים"></div></div>
+ <div class="row" style="margin-top:8px"><div><label>אלרגן בארוחה (לשמירה קבועה)</label><select id="mAll"><option value="">—</option>${ak.map(x=>`<option value="${esc(x.key)}" ${x.key===m.allergen?'selected':''}>${x.a.e} ${esc(x.label)}</option>`).join('')}</select></div><div><label>תיאבון</label><select id="mApp">${['','😋 אכל בהנאה','🙂 טעם קצת','🙅 לא רצה','🎨 בעיקר התלכלך (גם זה מעולה!)'].map(x=>`<option ${x===m.appetite?'selected':''}>${x}</option>`).join('')}</select></div></div>
+ <label style="margin-top:8px">תגובה / תסמין (ריק = אין)</label><input id="mReact" value="${esc(m.reaction)}" placeholder="פריחה, הקאה, נפיחות…">
+ <label style="margin-top:8px">הערות</label><textarea id="mNotes" rows="2">${esc(m.notes)}</textarea>
+ <div id="mWarn" aria-live="polite"></div>
+ <div class="row" style="margin-top:12px"><button type="button" class="btn" id="mOk">שמור</button><button type="button" class="btn sec" id="mCancel">ביטול</button></div>`);
+ const chk=()=>{const f=$('mFoods').value,am=ageMonths();const w=[];if(/דבש/.test(f)&&(am===null||am<12))w.push('🍯 דבש אסור עד גיל שנה!');if(/ענב|דובדבן|אוכמני|שרי/.test(f))w.push('🍇 מזון עגול וקטן – לחתוך לרבעים.');if(/פופקורן|מסטיק|סוכרי|טופי|מרשמלו|גרעינ/.test(f))w.push('🍿 מזון בסיכון חנק – להימנע עד גיל 5.');if(/חלב ניגר|כוס חלב/.test(f)&&(am===null||am<12))w.push('🥛 חלב ניגר כמשקה – להימנע עד גיל שנה.');$('mWarn').innerHTML=w.map(x=>`<div class="warn">${x}</div>`).join('')};
+ $('mFoods').addEventListener('input',chk);chk();
+ $('mCancel').onclick=closeM;
+ $('mOk').onclick=()=>{if(!$('mFoods').value.trim()){$('mWarn').innerHTML='<div class="warn">נא למלא מה הוגש.</div>';return}const reaction=$('mReact').value.trim();put(m.id||('meal|'+uid()),{type:'meal',date:$('mDate').value||today(),time:$('mTime').value,meal:$('mMeal').value,foods:$('mFoods').value.trim(),texture:$('mTex').value,amount:$('mAmt').value,allergen:$('mAll').value,appetite:$('mApp').value,reaction,notes:$('mNotes').value.trim(),status:reaction?(m.status||'open'):''});closeM()};
+}
+
+// ---------- ALLERGEN STEP MODAL ----------
+function stepForm(key,i,label){
+ const id='exp|'+key+'|'+i,r=get(id)||{date:today(),time:new Date().toTimeString().slice(0,5),food:'',reaction:'',notes:''};
+ modal(`<h2>${esc(label)} – ${STEPS[i].t}: ${STEPS[i].q} כפית</h2>
+ <div class="note">לערבב עם כפית מחית פרי/ירק ולהגיש ישירות לפה. עדיף בבוקר/צהריים.</div>
+ <div class="row"><div><label>תאריך</label><input type="date" id="eDate" value="${r.date}"></div><div><label>שעה</label><input type="time" id="eTime" value="${r.time}"></div></div>
+ <label style="margin-top:8px">צורת הגשה + עם מה ערבבנו</label><input id="eFood" value="${esc(r.food)}" placeholder="טחינה גולמית + מחית תפוח">
+ <label style="margin-top:8px">תגובה (ריק = אין תגובה)</label><input id="eReact" value="${esc(r.reaction)}">
+ <label style="margin-top:8px">הערות</label><textarea id="eNotes" rows="2">${esc(r.notes)}</textarea>
+ <div id="eW" aria-live="polite"></div>
+ <div class="row" style="margin-top:12px"><button type="button" class="btn" id="eOk">שמור</button>${get(id)?'<button type="button" class="btn red" id="eDel">מחק שלב</button>':''}<button type="button" class="btn sec" id="eC">ביטול</button></div>`);
+ const w=()=>{const t=$('eTime').value;$('eW').innerHTML=t&&t>'15:00'?'<div class="warn">⏰ מומלץ לחשוף בשעות הבוקר/צהריים – כדי שאפשר יהיה לעקוב אחרי תגובה.</div>':''};$('eTime').oninput=w;w();
+ $('eC').onclick=closeM;if($('eDel'))$('eDel').onclick=()=>{del(id);closeM()};
+ $('eOk').onclick=()=>{const reaction=$('eReact').value.trim();put(id,{type:'exp',key,step:i,date:$('eDate').value||today(),time:$('eTime').value,food:$('eFood').value,reaction,notes:$('eNotes').value,status:reaction?(r.status||'open'):''});closeM();if(reaction)setTimeout(()=>alert('⚠️ נרשמה תגובה. לפי ההנחיות: פונים לרופא/ה ולא חושפים שוב לאותו מזון עד לבירור מתאים.'),50)};
+}
+
+// ---------- RENDER ----------
+let calRef=new Date();calRef.setDate(1);
+function render(){
+ const s=settings();const am=ageMonths();
+ $('hdrBaby').textContent=s.name||s.birth?`${s.name||'התינוק/ת'}${am!==null?` · גיל ${am} חודשים`:''}${s.start?` · ${daysBetween(s.start,today())+1} ימים מאז הביס הראשון`:''}`:'הגדירו שם ותאריך לידה בלשונית "הגדרות וסנכרון"';
+ const users=(s.users||'').split(',').map(x=>x.trim()).filter(Boolean);const w=me();
+ $('whoSel').innerHTML=['<option value="">—</option>',...users.map(u=>`<option ${u===w?'selected':''}>${esc(u)}</option>`)].join('');
+ const meals=all('meal').sort((a,b)=>((b.date||'')+(b.time||'')).localeCompare((a.date||'')+(a.time||'')));
+ const ak=allergenKeys();const states=ak.map(x=>({...x,...expState(x.key)}));
+ const counted=states.filter(x=>!(x.a.k==='dairy'&&s.formulaDairy));
+ const doneN=counted.filter(x=>x.done).length;
+ const foodsDone=FOODS.filter(f=>meals.some(m=>foodList(m).includes(f[0]))).length;
+ const lab=k=>ak.find(x=>x.key===k)||{a:{e:''},label:String(k).replace('::',' – ')};
+ const exps=all('exp');
+ const reacts=[...meals.filter(m=>m.reaction).map(m=>({id:m.id,date:m.date,what:m.foods,r:m.reaction,st:m.status||'open',src:'meal'})),...exps.filter(e=>e.reaction).map(e=>({id:e.id,key:e.key,date:e.date,what:lab(e.key).label+' ('+STEPS[e.step].q+' כפית)',r:e.reaction,st:e.status||'open',src:'exp'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ const openR=reacts.filter(r=>r.st!=='closed');
+ $('kpis').innerHTML=`<div class="kpi"><b>${meals.length}</b>ארוחות מתועדות</div><div class="kpi"><b>${foodsDone}/${FOODS.length}</b>ירקות ופירות בסיסיים</div><div class="kpi"><b>${doneN}/${counted.length}</b>אלרגנים (כולל תת-סוגים) הושלמו</div><div class="kpi" style="background:${openR.length?'var(--rl)':'var(--gl)'}"><b style="color:${openR.length?'var(--r)':''}">${openR.length}</b>תגובות פתוחות לבירור</div>`;
+ // next step
+ let nx='';const blocked=new Set(openR.filter(r=>r.src==='exp').map(r=>r.key));
+ const inProg=states.find(x=>x.n>0&&x.n<3&&!x.react);
+ const lastExp=exps.slice().sort((a,b)=>((b.date||'')+(b.time||'')).localeCompare((a.date||'')+(a.time||'')))[0];
+ if(openR.length)nx+=`<div class="warn">🩺 יש ${openR.length} תגובה/ות פתוחה/ות – לפנות לרופא/ה ולא לחשוף שוב לאותו מזון עד לבירור. <a href="#" data-go="react">לרשימה</a></div>`;
+ if(am!==null&&am<6)nx+=`<div class="note">👶 עוד לפני גיל 6 חודשים – זה הזמן להכנה: היכרות עם כפית, אכילה מול התינוק וציוד.</div>`;
+ if(foodsDone<FOODS.length&&doneN===0&&!inProg)nx+=`<div class="ok">🍎 השלב הנוכחי: ירקות ופירות בסיסיים – מאכל חדש בכל יום (${foodsDone}/${FOODS.length}). <a href="#" data-go="foods">לצ'ק ליסט</a></div>`;
+ if(inProg){const nextI=inProg.n;const last=inProg.st[nextI-1];const sameDay=last&&last.date===today();nx+=`<div class="ok">🥜 בתהליך: <b>${inProg.a.e} ${esc(inProg.label)}</b> – הבא: ${STEPS[nextI].t}, ${STEPS[nextI].q} כפית ${sameDay?'(מחר)':'(היום)'} <button type="button" class="btn sm" data-step="${esc(inProg.key)}|${nextI}|${esc(inProg.label)}">רשום</button></div>`}
+ else{const nxt=counted.find(x=>x.n===0&&!blocked.has(x.key));if(nxt)nx+=`<div class="ok">➡️ האלרגן הבא שמחכה: <b>${nxt.a.e} ${esc(nxt.label)}</b> <button type="button" class="btn sm" data-step="${esc(nxt.key)}|0|${esc(nxt.label)}">התחל יום 1 (⅛ כפית)</button></div>`;else if(counted.length&&doneN===counted.length)nx+=`<div class="ok">🎉 כל האלרגנים הושלמו! עכשיו – לשלב אותם באופן קבוע בתזונה.</div>`}
+ if(lastExp&&lastExp.date===today()&&!inProg)nx+=`<div class="note">היום כבר בוצעה חשיפה – עדיף לא לפתוח אלרגן חדש באותו יום.</div>`;
+ if(!gh()&&!fh)nx+=`<div class="note">☁️ הנתונים נשמרים כרגע רק במכשיר הזה. לחיבור משותף – <a href="#" data-go="set">הגדרות וסנכרון</a>.</div>`;
+ $('nextStep').innerHTML='<h2>🎯 מה עושים עכשיו?</h2>'+(nx||'<div class="mut">הגדירו פרטים והתחילו לתעד.</div>')+`<div class="row" style="margin-top:8px"><button type="button" class="btn" data-add="1">+ ארוחה חדשה</button></div>`;
+ // calendar
+ const y=calRef.getFullYear(),mo=calRef.getMonth();$('calTitle').textContent=calRef.toLocaleDateString('he-IL',{month:'long',year:'numeric'});
+ let ch=['א','ב','ג','ד','ה','ו','ש'].map(d=>`<div class="chead">${d}</div>`).join('');const first=new Date(y,mo,1).getDay(),dim=new Date(y,mo+1,0).getDate();
+ for(let i=0;i<first;i++)ch+='<div></div>';
+ for(let d=1;d<=dim;d++){const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let inner='';exps.filter(e=>e.date===ds).forEach(e=>{const l=lab(e.key);inner+=`<span class="x ${e.reaction?'rr':'a'}" title="${esc(l.label)}">${l.a.e} ${STEPS[e.step].q}</span>`});meals.filter(m=>m.date===ds).forEach(m=>{inner+=`<span class="x ${m.reaction?'rr':''}" title="${esc(m.foods)}">${esc(m.foods)}</span>`});ch+=`<div class="cd ${ds===today()?'today':''}"><span class="n">${d}</span>${inner}</div>`}
+ $('cal').innerHTML=ch;
+ const ev=[...meals.map(m=>({d:(m.date||'')+' '+(m.time||''),t:`🍽️ ${m.meal}: ${m.foods}`,r:m.reaction,by:m.by})),...exps.map(e=>({d:(e.date||'')+' '+(e.time||''),t:`${lab(e.key).a.e} ${lab(e.key).label} – ${STEPS[e.step].q} כפית`,r:e.reaction,by:e.by}))].sort((a,b)=>b.d.localeCompare(a.d)).slice(0,12);
+ $('recent').innerHTML=ev.map(e=>`<div class="tl ${e.r?'r':''}"><b>${fmtD(e.d.slice(0,10))} ${e.d.slice(11)}</b> · ${esc(e.t)}${e.r?` <span class="pill r">תגובה: ${esc(e.r)}</span>`:''}${e.by?` <span class="pill gr">${esc(e.by)}</span>`:''}</div>`).join('')||'<div class="mut">אין עדיין רשומות.</div>';
+ const cl=(pref,arr)=>arr.map((t,i)=>{const r=get(pref+i);return`<label style="display:flex;gap:8px;align-items:center;color:var(--tx);font-size:14px;margin:4px 0"><input type="checkbox" style="width:auto" data-ck="${pref+i}" ${r&&r.v?'checked':''}> ${esc(t)} ${r&&r.v&&r.by?`<span class="pill gr">${esc(r.by)}</span>`:''}</label>`}).join('');
+ $('gear').innerHTML=cl('gear|',GEAR);$('ready').innerHTML=cl('ready|',READY);
+ $('roadmap').innerHTML='<div class="timeline">'+ROAD.map(([k,t],i)=>{const r=get('road|'+k);return`<div class="tl" style="${r&&r.v?'':'opacity:.75'}"><label style="display:flex;gap:8px;align-items:center;color:var(--tx);font-size:14.5px"><input type="checkbox" style="width:auto" data-ck="road|${k}" ${r&&r.v?'checked':''}> <b>שלב ${i+1}:</b> ${t} ${r&&r.v?`<span class="pill">✓ ${fmtD(r.d)}</span>`:''}</label></div>`}).join('')+'</div>';
+ $('foods').innerHTML=FOODS.map(([n,e])=>{const ms=meals.filter(m=>foodList(m).includes(n));const f1=ms[ms.length-1];return`<div class="fruit ${ms.length?'done':''}" data-food="${n}" role="button" tabindex="0"><div class="e">${e}</div><b>${n}</b><small>${ms.length?`${ms.length} הגשות · מ-${fmtD(f1.date)}`:'טרם הוגש'}</small></div>`}).join('');
+ $('foodBar').style.width=(foodsDone/FOODS.length*100)+'%';
+ $('extraFoods').innerHTML=all('xfood').map(f=>{const c=meals.filter(m=>foodList(m).includes(f.name)).length;return`<span class="pill">${esc(f.name)} · ${c} הגשות <a href="#" data-food="${esc(f.name)}">+הגשה</a> <a href="#" data-xf="${f.id}" title="הסר">✕</a></span>`}).join('')||'<span class="mut">—</span>';
+ $('formulaDairy').checked=!!s.formulaDairy;
+ $('allBar').style.width=(counted.length?doneN/counted.length*100:0)+'%';$('allPct').textContent=`${doneN}/${counted.length}`;
+ $('allergens').innerHTML=ALLERGENS.map(a=>{const items=states.filter(x=>x.a.k===a.k);const na=a.k==='dairy'&&s.formulaDairy;
+  const rows=items.map(x=>`<div style="margin-top:8px">${x.sub?`<b style="font-size:13px">${esc(x.sub)}</b> ${x.done?'<span class="pill">✓ הושלם</span>':x.react?'<span class="pill r">תגובה – לבירור</span>':''}`:''}<div class="steps">${[0,1,2].map(i=>{const r=x.st[i];const lock=!r&&((i>0&&!x.st[i-1])||x.react);return`<div class="step ${r?(r.reaction?'react':'done'):''} ${lock?'lock':''}" data-step="${lock?'':esc(x.key)+'|'+i+'|'+esc(x.label)}" role="button" tabindex="0"><b>${STEPS[i].q} כפית</b>${STEPS[i].t}${r?`<br>${fmtD(r.date)} ${r.time||''}${r.reaction?'<br>⚠️ '+esc(r.reaction):''}`:''}</div>`}).join('')}</div></div>`).join('');
+  const dn=items.filter(x=>x.done).length;
+  return`<div class="al" style="${na?'opacity:.6':''}"><div class="hd"><div><span class="ic">${a.e}</span> <b style="font-size:17px">${a.n}</b></div><div>${na?'<span class="pill gr">לא נדרש (תמ״ל חלבי)</span>':items.length>1?`<span class="pill">${dn}/${items.length}</span>`:items[0].done?'<span class="pill">✓ הושלם</span>':items[0].react?'<span class="pill r">תגובה</span>':''}</div></div>
+  <div class="mut" style="margin-top:4px">💡 הצעות הגשה: ${a.sv.join(' · ')}</div>${a.subNote?`<div class="note" style="margin:6px 0">${a.subNote}</div>`:''}${rows}
+  ${a.sub?`<div class="row" style="margin-top:8px"><div><input placeholder="הוסף סוג נוסף…" id="sub_${a.k}" aria-label="סוג נוסף"></div><div style="flex:0"><button type="button" class="btn sm" data-addsub="${a.k}">הוסף</button></div></div>`:''}</div>`}).join('');
+ const done=states.filter(x=>x.done);
+ $('maint').innerHTML=done.length?'<div class="tw"><table><thead><tr><th>אלרגן</th><th>סיום החשיפה</th><th>חשיפה אחרונה</th><th>ימים מאז</th><th></th></tr></thead><tbody>'+done.map(x=>{const dates=[x.st[2].date,...meals.filter(m=>m.allergen===x.key).map(m=>m.date)].filter(Boolean).sort();const last=dates[dates.length-1];const dd=daysBetween(last,today());return`<tr><td>${x.a.e} ${esc(x.label)}</td><td>${fmtD(x.st[2].date)}</td><td>${fmtD(last)}</td><td><span class="pill ${dd>7?'y':''}">${dd}</span></td><td><button type="button" class="btn sm" data-addal="${esc(x.key)}">+ שילוב בארוחה</button></td></tr>`}).join('')+'</tbody></table></div>':'<div class="mut">יופיע כאן לאחר השלמת חשיפה (3 ימים) לאלרגן.</div>';
+ const q=$('logQ').value.trim(),f=$('logF').value,fa=$('logA').value;
+ $('logBody').innerHTML=meals.filter(m=>(!q||((m.foods||'')+(m.notes||'')+(m.reaction||'')).includes(q))&&(!f||m.meal===f)&&(!fa||(fa==='al'?m.allergen:m.reaction))).map(m=>{const l=m.allergen?lab(m.allergen):null;return`<tr><td>${fmtD(m.date)}</td><td>${m.time||''}</td><td>${m.meal||''}</td><td><b>${esc(m.foods)}</b></td><td>${esc(m.texture)}</td><td>${esc(m.amount)}</td><td>${l?l.a.e+' '+esc(l.label):''}</td><td>${esc(m.appetite)}</td><td>${m.reaction?`<span class="pill r">${esc(m.reaction)}</span>`:''}</td><td>${esc(m.notes)}</td><td><span class="pill gr">${esc(m.by)}</span></td><td style="white-space:nowrap"><button type="button" class="btn sm sec" data-edit="${m.id}" aria-label="עריכה">✏️</button> <button type="button" class="btn sm red" data-delm="${m.id}" aria-label="מחיקה">🗑</button></td></tr>`}).join('')||'<tr><td colspan="12" class="mut">אין ארוחות.</td></tr>';
+ $('mealTable').innerHTML=MEALROWS.map(r=>{const hit=am!==null&&am>=r[0]&&am<r[1];return`<tr style="${hit?'background:var(--yl);font-weight:700':''}"><td>${r[2]}${hit?' 👈':''}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`}).join('');
+ const tm=meals.filter(m=>m.date===today());$('todayMeals').innerHTML=`<div class="note">היום תועדו <b>${tm.length}</b> ארוחות: ${tm.map(m=>m.meal).join(', ')||'—'}</div>`;
+ const wk=meals.filter(m=>{const d=daysBetween(m.date,today());return d>=0&&d<7});
+ const ironRe=/בקר|עוף|הודו|דג|סלמון|טונה|ביצ|קטני|עדש|חומוס|שעועית|טופו|תרד|טחינה/;
+ $('ironStat').innerHTML=`ב-7 הימים האחרונים: <b>${wk.filter(m=>ironRe.test(m.foods||'')).length}</b> ארוחות עם מקור ברזל מתוך ${wk.length}.`;
+ const dairyN=wk.filter(m=>/יוגורט|גבינ|ריקוטה|חלב|לבנה|קוטג/.test(m.foods||'')||m.allergen==='dairy').length;
+ const lim=am!==null&&am>=9?7:4;$('dairyStat').innerHTML=`ארוחות חלביות ב-7 הימים האחרונים: <b>${dairyN}</b> (המלצה לגיל: עד ${lim===7?'7':'3–4'} בשבוע) ${dairyN>lim?'<span class="pill y">מעל ההמלצה</span>':''}`;
+ const honey=meals.filter(m=>/דבש/.test(m.foods||'')).length;$('honeyCnt').textContent=honey?`⚠️ נמצאו ${honey} ארוחות עם "דבש" ביומן`:'';
+ const wl=all('water').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+ $('wList').innerHTML=wl.map(x=>`<div style="display:flex;gap:8px;align-items:center;margin:3px 0;flex-wrap:wrap"><span style="width:70px">${fmtD(x.date)}</span><div class="bar" style="flex:1;min-width:80px"><i style="width:${Math.min(100,(+x.ml||0)/240*100)}%"></i></div><span class="pill ${+x.ml>240?'y':''}">${+x.ml||0} מ״ל</span><span class="pill ${x.dia!==''&&+x.dia<4?'r':''}">${x.dia||'-'} טיטולים</span></div>`).join('')+'<div class="mut">יעד: 120–240 מ״ל · 4–6 טיטולים רטובים</div>';
+ $('reactList').innerHTML=reacts.length?'<div class="tw" style="margin-top:8px"><table><thead><tr><th>תאריך</th><th>מזון/אלרגן</th><th>תגובה</th><th>סטטוס</th></tr></thead><tbody>'+reacts.map(r=>`<tr><td>${fmtD(r.date)}</td><td>${esc(r.what)}</td><td>${esc(r.r)}</td><td><select data-rst="${r.id}" style="width:auto" aria-label="סטטוס">${[['open','🔴 פתוח – לפנות לרופא/ה'],['doc','🟡 בבירור רפואי'],['closed','🟢 נסגר/הובהר']].map(([v,t])=>`<option value="${v}" ${r.st===v?'selected':''}>${t}</option>`).join('')}</select></td></tr>`).join('')+'</tbody></table></div>':'<div class="ok">אין תגובות מתועדות 👍</div>';
+ const ae=document.activeElement;if(!(ae&&ae.closest&&ae.closest('#t-set'))){$('sName').value=s.name||'';$('sBirth').value=s.birth||'';$('sStart').value=s.start||'';$('sUsers').value=s.users||''}
+}
+
+// ---------- EVENTS ----------
+function act(e){
+ const t=e.target.closest('[data-step],[data-add],[data-food],[data-edit],[data-delm],[data-addsub],[data-addal],[data-xf],[data-go]');if(!t)return;
+ if(t.dataset.go){e.preventDefault();go(t.dataset.go);window.scrollTo(0,0)}
+ else if(t.dataset.step!==undefined){if(!t.dataset.step)return;const p=t.dataset.step.split('|');stepForm(p[0],+p[1],p.slice(2).join('|'))}
+ else if(t.dataset.add)mealForm();
+ else if(t.dataset.food){e.preventDefault();mealForm(null,{foods:t.dataset.food})}
+ else if(t.dataset.edit)mealForm(get(t.dataset.edit));
+ else if(t.dataset.delm){if(confirm('למחוק ארוחה?'))del(t.dataset.delm)}
+ else if(t.dataset.addsub){const v=$('sub_'+t.dataset.addsub).value.trim();if(v)put('subtype|'+uid(),{type:'subtype',parent:t.dataset.addsub,name:v})}
+ else if(t.dataset.addal)mealForm(null,{allergen:t.dataset.addal});
+ else if(t.dataset.xf){e.preventDefault();if(confirm('להסיר?'))del(t.dataset.xf)}
+}
+document.body.addEventListener('click',act);
+document.body.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button]')){e.preventDefault();act(e)}});
+document.body.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.ck)put(t.dataset.ck,{type:'ck',v:t.checked,d:today()});
+ if(t.dataset.rst){const r=get(t.dataset.rst);if(r)put(r.id,{...r,status:t.value})}
+});
+$('addMeal').onclick=()=>mealForm();
+['logQ','logF','logA'].forEach(i=>$(i).addEventListener('input',render));
+$('calPrev').onclick=()=>{calRef.setMonth(calRef.getMonth()-1);render()};$('calNext').onclick=()=>{calRef.setMonth(calRef.getMonth()+1);render()};
+$('addFood').onclick=()=>{const v=$('newFood').value.trim();if(v){put('xfood|'+uid(),{type:'xfood',name:v});$('newFood').value=''}};
+$('formulaDairy').onchange=e=>put('settings',{...settings(),type:'settings',formulaDairy:e.target.checked});
+$('sSave').onclick=()=>{put('settings',{...settings(),type:'settings',name:$('sName').value.trim(),birth:$('sBirth').value,start:$('sStart').value,users:$('sUsers').value});alert('נשמר ✓')};
+$('whoSel').onchange=e=>{localStorage.setItem(LS+'_who',e.target.value)};
+$('wDate').value=today();
+$('wSave').onclick=()=>{const d=$('wDate').value;if(!d)return;const ml=Math.max(0,+$('wMl').value||0),dia=$('wDia').value===''?'':Math.max(0,+$('wDia').value||0);put('water|'+d,{type:'water',date:d,ml,dia});$('wMl').value='';$('wDia').value=''};
+$('btnSyncNow').onclick=syncNow;$('fsNew').onclick=()=>fsNew().catch(()=>{});$('fsOpen').onclick=()=>fsOpen().catch(()=>{});
+$('fsOff').onclick=async()=>{fh=null;if(!gh())clearInterval(timer);try{const d=await idb();d.transaction('h','readwrite').objectStore('h').delete('file')}catch(e){}syncNow()};
+
+// GitHub settings UI
+function ghForm(){return{owner:$('ghOwner').value.trim(),repo:$('ghRepo').value.trim(),branch:$('ghBranch').value.trim()||'main',path:($('ghPath').value.trim()||'data.json').replace(/^\/+/,''),token:$('ghToken').value.trim()}}
+function ghFill(){const c=JSON.parse(localStorage.getItem(GHK)||'null')||{};if(c.owner)$('ghOwner').value=c.owner;if(c.repo)$('ghRepo').value=c.repo;if(c.branch)$('ghBranch').value=c.branch;if(c.path)$('ghPath').value=c.path;if(c.token)$('ghToken').value=c.token}
+const ghMsg=(cls,t)=>{$('ghMsg').innerHTML=`<div class="${cls}">${t}</div>`};
+async function ghTest(c){
+ if(!c.owner||!c.repo||!c.token){ghMsg('warn','נא למלא שם משתמש, ריפו וטוקן.');return false}
+ try{const r=await fetch(`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}`,{cache:'no-store',headers:ghHeaders(c)});
+  if(!r.ok){ghMsg('warn','❌ '+ghErr(r.status));return false}
+  const j=await r.json();
+  const priv=j.private?'🔒 הריפו פרטי – מצוין.':'⚠️ שימו לב: הריפו <b>ציבורי</b> – כל אחד יוכל לראות את הנתונים. מומלץ להפוך אותו לפרטי.';
+  const canW=j.permissions?j.permissions.push:true;
+  ghMsg(j.private&&canW?'ok':'note',`✅ החיבור תקין ל-<code>${esc(j.full_name)}</code>. ${priv} ${canW?'':'<br>❌ לטוקן אין הרשאת כתיבה.'}`);return canW}
+ catch(e){ghMsg('warn','❌ לא ניתן להתחבר: '+esc(e.message));return false}
+}
+$('ghTest').onclick=()=>ghTest(ghForm());
+$('ghConnect').onclick=async()=>{const c=ghForm();if(await ghTest(c)){localStorage.setItem(GHK,JSON.stringify(c));dirty=true;startLoop()}};
+$('ghOff').onclick=()=>{if(!confirm('לנתק את הסנכרון במכשיר הזה? (הנתונים נשארים ב-GitHub ובמכשיר)'))return;localStorage.removeItem(GHK);$('ghToken').value='';if(!fh)clearInterval(timer);ghMsg('note','נותק. הנתונים נשמרים במכשיר בלבד עד לחיבור מחדש.');syncNow()};
+$('ghLink').onclick=async()=>{const c=ghForm();if(!c.owner||!c.repo){ghMsg('warn','נא למלא קודם שם משתמש וריפו.');return}
+ const url=location.origin+location.pathname+'#setup='+encodeURIComponent(JSON.stringify({owner:c.owner,repo:c.repo,branch:c.branch,path:c.path}));
+ try{await navigator.clipboard.writeText(url);ghMsg('ok','📋 הקישור הועתק (ללא טוקן). שלחו אותו לבן/בת הזוג.')}catch(e){ghMsg('note','העתיקו ידנית: <code style="word-break:break-all">'+esc(url)+'</code>')}};
+// setup link from hash
+(function(){const m=location.hash.match(/#setup=(.+)$/);if(!m)return;try{const c=JSON.parse(decodeURIComponent(m[1]));const cur=JSON.parse(localStorage.getItem(GHK)||'null')||{};localStorage.setItem(GHK,JSON.stringify({...cur,...c,token:cur.token||''}));history.replaceState(null,'',location.pathname);localStorage.setItem(LS+'_tab','set');setTimeout(()=>ghMsg('ok','👋 ההגדרות מולאו מהקישור. נשאר רק להדביק את הטוקן שלך וללחוץ "שמור והתחבר".'),100)}catch(e){}})();
+
+const dl=(name,txt,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()};
+$('exp').onclick=()=>dl('baby-food-backup-'+today()+'.json',JSON.stringify(db),'application/json');
+$('imp').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{merge(JSON.parse(await f.text()));persist();alert('מוזג בהצלחה ✓')}catch(x){alert('קובץ לא תקין')}e.target.value=''};
+$('csv').onclick=()=>{const ak=allergenKeys();const lb=k=>(ak.find(x=>x.key===k)||{label:k||''}).label;const rows=[['תאריך','שעה','ארוחה','מה הוגש','מרקם','כמות','אלרגן','תיאבון','תגובה','הערות','תיעד/ה']];all('meal').sort((a,b)=>((a.date||'')+(a.time||'')).localeCompare((b.date||'')+(b.time||''))).forEach(m=>rows.push([m.date,m.time,m.meal,m.foods,m.texture,m.amount,m.allergen?lb(m.allergen):'',m.appetite,m.reaction,m.notes,m.by]));all('exp').forEach(x=>rows.push([x.date,x.time,'חשיפה לאלרגן',x.food,'',STEPS[x.step].q+' כפית',lb(x.key),'',x.reaction,x.notes,x.by]));dl('baby-food-log-'+today()+'.csv','\ufeff'+rows.map(r=>r.map(c=>'"'+String(c??'').replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv')};
+$('wipe').onclick=()=>{if(confirm('למחוק את הנתונים המקומיים במכשיר הזה? (הנתונים ב-GitHub לא יימחקו ויחזרו בסנכרון הבא)')){db={recs:{}};localStorage.setItem(LS,JSON.stringify(db));render()}};
+
+// ---------- INIT ----------
+ghFill();go(localStorage.getItem(LS+'_tab')||'dash');render();
+if(gh())startLoop();
+else loadHandle().then(h=>{if(h&&h.queryPermission){fh=h;setSync('err','לחצו "סנכרן עכשיו" לאישור גישה לקובץ '+h.name);fh.queryPermission({mode:'readwrite'}).then(p=>{if(p==='granted')startLoop();else timer=setInterval(()=>fh&&fh.queryPermission({mode:'readwrite'}).then(p=>p==='granted'&&fileSync()),20000)})}});
+})();
+</script>
+</body>
+</html>
